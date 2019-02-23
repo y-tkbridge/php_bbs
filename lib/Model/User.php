@@ -15,7 +15,7 @@ class User extends \Bbs\Model {
     if ($res === false) {
       throw new \Bbs\Exception\DuplicateEmail();
     }
-    $this->login($values['email']);
+   // $this->login($values['email']);
   }
 
   public function update($values) {
@@ -32,9 +32,6 @@ class User extends \Bbs\Model {
      $_SESSION['me'] = $user;
   }
 
-
-  
-
   public function login($values) {
     $stmt = $this->db->prepare("SELECT * FROM users WHERE email = :email;");
     $stmt->execute([
@@ -47,12 +44,28 @@ class User extends \Bbs\Model {
       throw new \Bbs\Exception\UnmatchEmailOrPassword();
     }
 
-    if (!password_verify($values['password'], $user->password)) {
+    else if (!password_verify($values['password'], $user->password)) {
       throw new \Bbs\Exception\UnmatchEmailOrPassword();
     }
-
     return $user;
   }
+
+  //退会したアカウントかチェックする
+  public function deleteUser(){
+    $stmt = $this->db->prepare("SELECT * FROM users WHERE email = :email;");
+    $stmt->execute([
+      ':email' => $values['email']
+    ]);
+    $stmt->setFetchMode(\PDO::FETCH_CLASS, 'stdClass');
+    $user = $stmt->fetch();
+
+    if ($user->delflag === 1){
+      throw new \Bbs\Exception\DeleteUser();
+
+    }
+    return False;
+  }
+
 
   public function find($id) {
     $stmt = $this->db->prepare("SELECT * FROM users WHERE id = id;");

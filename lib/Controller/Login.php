@@ -30,10 +30,18 @@ class Login extends \Bbs\Controller {
     } else {
       try {
         $userModel = new \Bbs\Model\User();
+        
         $user = $userModel->login([
           'email' => $_POST['email'],
           'password' => $_POST['password']
         ]);
+
+         //退会したユーザーか判定する
+         if ($user->delflag === "1"){
+          $e = new \Bbs\Exception\DeleteUser();
+          $this->setErrors('login', $e->getMessage());
+          return;
+        }
       }
       catch (\Bbs\Exception\UnmatchEmailOrPassword $e) {
         $this->setErrors('login', $e->getMessage());

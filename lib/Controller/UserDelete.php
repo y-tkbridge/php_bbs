@@ -1,13 +1,10 @@
 <?php
 
 namespace Bbs\Controller;
-
-var_dump($_POST);
-class UserUpdate extends \Bbs\Controller {
+class UserDelete extends \Bbs\Controller {
   public function run() {
     $user = new \Bbs\Model\User();
     $userData = $user->find($_SESSION['me']->id);
-
     $this->setValues('username', $userData->username);
     $this->setValues('email', $userData->email);
     if ($_SERVER['REQUEST_METHOD'] === 'POST') {
@@ -34,17 +31,13 @@ class UserUpdate extends \Bbs\Controller {
       // ユーザー情報更新
       try {
         $userModel = new \Bbs\Model\User();
-        $userModel->update([
-          'username' => $_POST['username'],
-          'email' => $_POST['email']
-        ]);
-      }
+        $userModel->deleteUser();}
       catch (\Bbs\Exception\DuplicateEmail $e) {
         $this->setErrors('email', $e->getMessage());
         return;
       }
     }
-    header('Location: '. SITE_URL . '/mypage.php');
+    header('Location: '. SITE_URL . '/Logout.php');
     exit;
   }
 

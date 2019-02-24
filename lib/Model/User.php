@@ -15,7 +15,7 @@ class User extends \Bbs\Model {
     if ($res === false) {
       throw new \Bbs\Exception\DuplicateEmail();
     }
-    $this->login($values['email']);
+   //$this->login($values['email']);
   }
 
   public function update($values) {
@@ -29,11 +29,10 @@ class User extends \Bbs\Model {
     if ($res === false) {
       throw new \Bbs\Exception\DuplicateEmail();
     }
-     $_SESSION['me'] = $user;
+    $stmt->setFetchMode(\PDO::FETCH_CLASS, 'stdClass');
+    $user = $stmt->fetch();
+    $_SESSION['me'] = $user;
   }
-
-
-  
 
   public function login($values) {
     $stmt = $this->db->prepare("SELECT * FROM users WHERE email = :email;");
@@ -47,19 +46,36 @@ class User extends \Bbs\Model {
       throw new \Bbs\Exception\UnmatchEmailOrPassword();
     }
 
-    if (!password_verify($values['password'], $user->password)) {
+    else if (!password_verify($values['password'], $user->password)) {
       throw new \Bbs\Exception\UnmatchEmailOrPassword();
     }
-
     return $user;
   }
 
+  //退会処理
+  public function deleteUser(){
+    $stmt = $this->db->prepare("UPDATE users SET delflag = :delflag,modified = now() where id = :id");
+    $stmt->execute([
+      ':delflag' => "1",
+      ':id' => $_SESSION['me']->id,
+    ]);
+    // メールアドレスがユニークでなければfalseを返す
+    if ($res === false) {
+      throw new \Bbs\Exception\DuplicateEmail();
+    }
+    $stmt->setFetchMode(\PDO::FETCH_CLASS, 'stdClass');
+    $user = $stmt->fetch();
+    $_SESSION['me'] = $user;
+  }
+
+
   public function find($id) {
-    $stmt = $this->db->prepare("SELECT * FROM users WHERE id = id;");
+    $stmt = $this->db->prepare("SELECT * FROM users WHERE id = :id;");
     $stmt->bindValue('id',$id);
     $stmt->execute();
     $stmt->setFetchMode(\PDO::FETCH_CLASS, 'stdClass');
     $user = $stmt->fetch();
+
     return $user;
   }
 

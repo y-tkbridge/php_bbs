@@ -52,32 +52,29 @@ class User extends \Bbs\Model {
     return $user;
   }
 
-  //退会したアカウントかチェックする
+  //退会処理
   public function deleteUser(){
-    $stmt = $this->db->prepare("SELECT * FROM users WHERE email = :email;");
+    $stmt = $this->db->prepare("UPDATE users SET delflag = :delflag,modified = now() where id = :id");
     $stmt->execute([
-      ':email' => $values['email']
+      ':delflag' => "1",
+      ':id' => $_SESSION['me']->id,
     ]);
+    // メールアドレスがユニークでなければfalseを返す
+    if ($res === false) {
+      throw new \Bbs\Exception\DuplicateEmail();
+    }
     $stmt->setFetchMode(\PDO::FETCH_CLASS, 'stdClass');
     $user = $stmt->fetch();
-
-    if ($user->delflag === 1){
-      throw new \Bbs\Exception\DeleteUser();
-
-    }
-    return False;
+    $_SESSION['me'] = $user;
   }
 
 
   public function find($id) {
-    var_dump('User.php find id is ->'.$id.'<br/>');
     $stmt = $this->db->prepare("SELECT * FROM users WHERE id = :id;");
     $stmt->bindValue('id',$id);
     $stmt->execute();
     $stmt->setFetchMode(\PDO::FETCH_CLASS, 'stdClass');
     $user = $stmt->fetch();
-   
-    //var_dump('User class match user name is  ->'.$user->username);
 
     return $user;
   }

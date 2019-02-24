@@ -30,7 +30,7 @@ class Logout extends \Bbs\Controller {
       session_destroy();
 
     }
-
+    session_destroy();
     // ログインページへリダイレクト
     header('Location: ' . SITE_URL . '/login.php');
   }

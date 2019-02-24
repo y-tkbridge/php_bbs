@@ -40,7 +40,7 @@ class Login extends \Bbs\Controller {
          if ($user->delflag === "1"){
           $e = new \Bbs\Exception\DeleteUser();
           $this->setErrors('login', $e->getMessage());
-          
+          return;
         }
       }
       catch (\Bbs\Exception\UnmatchEmailOrPassword $e) {

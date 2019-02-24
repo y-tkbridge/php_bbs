@@ -3,12 +3,12 @@
 require_once(__DIR__ .'/header.php');
 require_once(__DIR__ . '/redirect.php');
 
-$app = new Bbs\Controller\UserUpdate();
+$app = new Bbs\Controller\UserDelete();
 $app->run();
 ?>
-<h1 class="page__ttl">マイページ</h1>
+<h1 class="page__ttl">退会手続き</h1>
 <div class="container">
-  <form action="" method="post" id="userupdate" class="form">
+  <form action="" method="post" id="userdelete" class="form">
     <div class="form-group">
       <label>メールアドレス</label>
       <input type="text" name="email" value="<?= isset($app->getValues()->email) ? h($app->getValues()->email): ''; ?>" class="form-control">
@@ -25,8 +25,7 @@ $app->run();
       <p class="err"></p>
     </div>
     <p class="err"></p>
-    <button class="btn btn-primary" value="userupdate" onclick="document.getElementById('userupdate').submit();">更新</button>
-    <a class="btn btn-primary" href="./userdelete.php">退会手続き</a>
+    <button class="btn btn-primary" value="userdelete" onclick="document.getElementById('userdelete').submit();">退会</button>
 
     <input type="hidden" name="token" value="<?= h($_SESSION['token']); ?>">
   </form>

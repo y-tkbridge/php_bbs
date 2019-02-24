@@ -50,17 +50,12 @@ class Signup extends \Bbs\Controller {
 
       // ユーザー登録後、ログイン処理
       //session_regenerate_id関数･･･現在のセッションIDを新しいものと置き換える。セッションハイジャック対策
-      // session_regenerate_id(true);
-      // $_SESSION['me'] = $user;
-      // var_dump($user);
-      // exit;
+       session_regenerate_id(true);
+       $_SESSION['me'] = $user;
+       
 
       // Todo トップページへリダイレクトへ修正
       header('Location:'. SITE_URL . '/Login.php');
-      var_dump(SITE_URL);
-      
-      //デバッグl
-      var_dump(SITE_URL);
       exit;
     }
   }

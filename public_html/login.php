@@ -5,7 +5,6 @@ require_once(__DIR__ .'/header.php');
 $app = new Bbs\Controller\Login();
 $app->run();
 
-echo $_SESSION['me'];
 ?>
 <div class="container">
   <form action="" method="post" id="login" class="form">

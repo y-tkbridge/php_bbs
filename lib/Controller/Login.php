@@ -40,7 +40,7 @@ class Login extends \Bbs\Controller {
          if ($user->delflag === "1"){
           $e = new \Bbs\Exception\DeleteUser();
           $this->setErrors('login', $e->getMessage());
-          return;
+          
         }
       }
       catch (\Bbs\Exception\UnmatchEmailOrPassword $e) {
@@ -56,9 +56,9 @@ class Login extends \Bbs\Controller {
 
       // ユーザー情報をセッションに格納
       $_SESSION['me'] = $user;
-
+      
       // トップページへリダイレクト
-      header('Location: '. SITE_URL.'/index.php');
+      header('Location: '. SITE_URL.'/Login.php');
       exit;
     }
   }

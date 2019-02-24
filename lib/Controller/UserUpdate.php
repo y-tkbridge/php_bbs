@@ -6,6 +6,12 @@ class UserUpdate extends \Bbs\Controller {
   public function run() {
     $user = new \Bbs\Model\User();
     $userData = $user->find($_SESSION['me']->id);
+
+    var_dump('User.php find user id is ->'.$userData->id.'<br/>');
+    var_dump('UserUpdate Session is '.$_SESSION['me']->id.'<br/>');
+    var_dump('UserUpdate Session is '.$_SESSION['me']->username.'<br/>');
+
+
     $this->setValues('username', $userData->username);
     $this->setValues('email', $userData->email);
     if ($_SERVER['REQUEST_METHOD'] === 'POST') {

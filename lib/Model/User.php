@@ -15,7 +15,7 @@ class User extends \Bbs\Model {
     if ($res === false) {
       throw new \Bbs\Exception\DuplicateEmail();
     }
-   // $this->login($values['email']);
+   //$this->login($values['email']);
   }
 
   public function update($values) {
@@ -29,7 +29,9 @@ class User extends \Bbs\Model {
     if ($res === false) {
       throw new \Bbs\Exception\DuplicateEmail();
     }
-     $_SESSION['me'] = $user;
+    $stmt->setFetchMode(\PDO::FETCH_CLASS, 'stdClass');
+    $user = $stmt->fetch();
+    $_SESSION['me'] = $user;
   }
 
   public function login($values) {
@@ -68,11 +70,15 @@ class User extends \Bbs\Model {
 
 
   public function find($id) {
-    $stmt = $this->db->prepare("SELECT * FROM users WHERE id = id;");
+    var_dump('User.php find id is ->'.$id.'<br/>');
+    $stmt = $this->db->prepare("SELECT * FROM users WHERE id = :id;");
     $stmt->bindValue('id',$id);
     $stmt->execute();
     $stmt->setFetchMode(\PDO::FETCH_CLASS, 'stdClass');
     $user = $stmt->fetch();
+   
+    //var_dump('User class match user name is  ->'.$user->username);
+
     return $user;
   }
 

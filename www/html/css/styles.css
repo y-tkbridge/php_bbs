@@ -157,7 +157,29 @@ body {
 .postpage_container {
   display: flex;
   justify-content: center;
-  background: #777;
-  width:900px;
+  background-color: ivory;
+  width:auto;
+  max-width: 900px;
+  height:400px;
   margin:auto;
+}
+
+.postpage_container > .previw_area{
+  text-align: center;
+  width:600px;
+
+}
+
+.postpage_container > .previw_area {
+  width:300px;
+}
+.preview_img{
+  width:700px;
+}
+
+.post_area{
+ display: flex;
+ justify-content: center;
+ margin:auto;
+
 }

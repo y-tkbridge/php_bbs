@@ -1,33 +1,29 @@
 <?php 
 
-require 'header.php'; 
+require 'header.php';
 
-$app = new Bbs\Controller\Postpage();
-$app->run();
+$app = new Bbs\Model\Attribute();
+$category = $app->getAllCategory();
 
 ?>
-<div class="postpage_container">
-  <div id="app">
-    <form action="postpage.php" method="POST" enctype="multipart/form-data">
-        <div class="preview_area" v-if="preview">
-                <img class="preview_img" :src="preview">
-        </div>
-        <div class="post_area">
-          <div class="post_area">
-          <!-- <i class="icon_size fas fa-cloud-upload-alt"></i> -->
-            <input type="submit" value="ファイルをアップロードする">  
-            <input type="file" name="upload_file" @change="change">  
-          </div>
-
-        </div>
-    
-    </form>
+<div class="postpage_container card" id="app">
+  <form class="formrun" action="<?= SITE_URL.'/postpage_comp.php'?>" method="post" enctype="multipart/form-data">
+    <div class="form-group">
+        <input class="form-control" type="text" name="title" placeholder="title">
+        <input class="form-control" type="text" name="comment" placeholder="comment">
     </div>
+      <div class="item">
+        <input type="file" alt="投稿"　name="upload_file" @change="change">
+        <input type="submit" value="ファイルをアップロードする">
+    </div>
+    <div class="preview_area">
+      <span  v-if="preview">
+        <img class="preview_img" :src="preview">
+      </span>
+    </div>
+  </form>
 </div>
 
-
-
-
 <script src="./js/main.js"></script>
-</body>
+
 

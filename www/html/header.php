@@ -4,7 +4,7 @@ require_once __DIR__.'/../config/config.php';
 <!DOCTYPE html>
 <html>
 <head>
-  <title>掲示板</title>
+  <title>画像投稿サイト</title>
   <link href="https://fonts.googleapis.com/css?family=Charm|M+PLUS+Rounded+1c&amp;subset=latin-ext,thai,vietnamese" rel="stylesheet">
   <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO" crossorigin="anonymous">
   <link href="https://cdnjs.cloudflare.com/ajax/libs/uikit/3.1.5/css/uikit-core-rtl.css">
@@ -20,7 +20,7 @@ require_once __DIR__.'/../config/config.php';
 <body>
 <header class="sticky-top header">
 <nav class="navbar navbar-expand-lg navbar-light bg-light">
-  <a class="navbar-brand" href="#">Navbar</a>
+  <a class="navbar-brand" href="#">Story</a>
   <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarTogglerDemo02" aria-controls="navbarTogglerDemo02" aria-expanded="false" aria-label="Toggle navigation">
     <span class="navbar-toggler-icon"></span>
   </button>
@@ -30,22 +30,19 @@ require_once __DIR__.'/../config/config.php';
       <li class="nav-item active">
         <a class="nav-link" href="<?= SITE_URL; ?>/index.php">Home<span class="sr-only">(current)</span></a>
       </li>
-      <li class="nav-item">
-        <a class="nav-link" href="#">Link</a>
-      </li>
-      <li class="nav-item">
-        <a class="nav-link disabled" href="#">Disabled</a>
-      </li>
       <?php if (isset($_SESSION['me'])) {?>
       <li class="nav-item">
-        <a class="nav-link disabled" href="<?= SITE_URL; ?>/postpage.php">PostPage<span class="sr-only">(current)</span></a>
+        <a class="nav-link " href="<?= SITE_URL; ?>/postpage.php">PostPage<span class="sr-only">(current)</span></a>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link "  href="<?= SITE_URL; ?>/profile.php">Profile</a>
       </li>
       <?php } ?>
     </ul>
     <div class="user_action_container">
     </div>
       <?php if (isset($_SESSION['me'])) {?>
-        <form action="logout.php" method="post" id="logout">
+        <form action="<?= SITE_URL; ?>/logout.php" method="post" id="logout">
             <input type="submit" value="ログアウト">
             <input type="hidden" name="token" value="<?= h($_SESSION['token']); ?>">
         </form>
@@ -53,39 +50,8 @@ require_once __DIR__.'/../config/config.php';
         <li class="btn my-2 my-sm-0"><a href="<?= SITE_URL; ?>/login.php">ログイン</a></li>
         <li class="btn my-2 my-sm-0"><a href="<?= SITE_URL; ?>/signup.php">ユーザー登録</a></li>
       <?php } ?>
-  </div>
+t  </div>
 </nav>
-
-<!-- 
-<nav class="navbar navbar-expand-lg navbar-light bg-light">
-  <div>
-    <a class="navbar-brand" href="#">Navbar</a>
-    <div class="collapse navbar-collapse" id="navbarSupportedContent">
-      <ul class="navbar-nav mr-auto">
-
-  
-        <?php if (isset($_SESSION['me'])) {?>
-
-          <li class="nav-item">
-            <a class="nav-link" href="<?= SITE_URL; ?>/mypage.php">MyPage<span class="sr-only">(current)</span></a>
-          </li>
-          
-          <li class="nav-item">
-            <a class="nav-link" href="<?= SITE_URL; ?>/postpage.php">PostPage<span class="sr-only">(current)</span></a>
-          </li>
-          <form action="logout.php" method="post" id="logout">
-            <input type="submit" value="ログアウト">
-            <input type="hidden" name="token" value="<?= h($_SESSION['token']); ?>">
-          </form>
-        <?php } else { ?>
-          <div class="nav_container">
-            <li class="user-btn"><a href="<?= SITE_URL; ?>/login.php">ログイン</a></li>
-            <li><a href="<?= SITE_URL; ?>/signup.php">ユーザー登録</a></li>
-          </div>
-        <?php } ?>
-      </ul>
-    </div>
-  </nav> -->
 </header>
 
 

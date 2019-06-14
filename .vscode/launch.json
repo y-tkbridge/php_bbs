@@ -11,7 +11,7 @@
             "port": 9000,
             "pathMappings": {
                 // {docker上のdocument root}:{ローカルのdocument root} 
-                "/var/www/html":"/Users/yuta/Documents/Develop/php_bbs/www/"
+                "/var/www/":"/Users/yuta/Documents/Develop/php_bbs/www/"
             },
         },
         {

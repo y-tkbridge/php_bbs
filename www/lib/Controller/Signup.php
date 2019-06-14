@@ -9,8 +9,8 @@ class Signup extends \Bbs\Controller
     {
         // ログインしていればトップページへ移動
         if ($this->isLoggedIn()) {
-            header('Location: '.SITE_URL.'/index.php');
-            exit;
+             echo "\<meta http-equiv='refresh' content='0;url=http://localhost:8000/index.php'>";
+            // exit;
         }
         // POSTメソッドがリクエストされていればpostProcessメソッド実行
         if ($_SERVER['REQUEST_METHOD'] === 'POST') {
@@ -55,10 +55,9 @@ class Signup extends \Bbs\Controller
             //session_regenerate_id関数･･･現在のセッションIDを新しいものと置き換える。セッションハイジャック対策
             session_regenerate_id(true);
             $_SESSION['me'] = $user;
-
-            // Todo トップページへリダイレクトへ修正
-            header('Location:'.SITE_URL.'/Login.php');
-            exit;
+            //TODO リダイレクトが動かない
+            // echo "\<meta http-equiv='refresh' content='0;url=http://localhost:8000/index.php'>";
+            // exit;
         }
     }
 

@@ -4,100 +4,112 @@ namespace Bbs\Controller;
 
 class Postpage extends \Bbs\Controller
 {
+    // view で最初に読み込まれる
     public function run()
     {
-        $messages = array();
-        if (!empty($_FILES)) {
-           $this->get_imgfile($file);
+        // POSTメソッドがリクエストされていればpostProcessメソッド実行
+        if ($_SERVER['REQUEST_METHOD'] === 'POST' && $_FILES['upload_file']['name'] !== "" ) {
+            $this->postProcess();
         } else {
-            return $messages = array('error' => 'file empty');
+            //TODO POSTメソッドでない場合、何らかのメッセージを表示する
+            echo "\<meta http-equiv='refresh' content='0;url=http://localhost:8000/postpage.php'>";
+           
         }
     }
 
-    public function get_filetype(){
+    public function getImageType(){
         $file = $_FILES['upload_file'];
-        $tmp_name = $file['tmp_name']; // 一時ファイルのパス
-        $tmp_size = getimagesize($tmp_name); // 一時ファイルの情報を取得
+
+        // 一時ファイルのパス
+        $tmp_name = $file['tmp_name'];
+
+        // 一時ファイルの情報を取得
+        $tmp_size = getimagesize($tmp_name); 
+
         $file_info = pathinfo($_FILES['upload_file']['name']);
         $extension = strtolower($file_info['extension']);
         return $extension;
-        
     }
 
-    public function get_imgfile(){
-        $extension = $this->get_filetype();
-        $uploaddir = '/var/www/html/img/';
-        $save_stamp = date('YmdHis');
-        $uploadfile = $uploaddir . $save_stamp . basename($_FILES['upload_file']['name']);
+    // 画像イメージを指定してディレクトリに保存する
+    public function saveImage(){
+        $extension = $this->getImageType();
+        $uploaddir =  './img/';
+        $saveTimeStamp = date('YmdHis');
+        $uploadfile = $uploaddir  .$saveTimeStamp. basename($_FILES['upload_file']['name']);
+        //DEBUG
+        //TODO 保存ディレクトリを取得する
+
         if (move_uploaded_file($_FILES['upload_file']['tmp_name'], $uploadfile)) {
-            echo "<b>Upload success.</b>";
+            return $uploadfile;
         } else {
-            echo "<b>Upload failed.</b>";
+           //TODO アップロードエラーを表示する
         }   
     }
 
-    public function createPost()
+    protected function postProcess()
     {
-        $postModel = new \Bbs\Model\Postimage();
-        $postModel->createComment([
-          'thread_id' => $_POST['thread_id'],
-          'user_id' => $_SESSION['me']->id,
-          'content' => $_POST['content'],
-        ]);
+        $saveImagePath = $this->saveImage();
+        // TODO 投稿の際に必要なバリデーションを行う
+        // try {
+        //     $this->validate();
+        // } catch (\Bbs\Exception\InvalidEmail $e) {
+        //     $this->setErrors('email', $e->getMessage());
+        // } catch (\Bbs\Exception\InvalidName $e) {
+        //     $this->setErrors('username', $e->getMessage());
+        // } catch (\Bbs\Exception\InvalidPassword $e) {
+        //     $this->setErrors('password', $e->getMessage());
+        // }
+
+        //TODO 表画面への処理結果の表示について要検討
+        // $this->setValues('email', $_POST['email']);
+        // $this->setValues('username', $_POST['username']);
+
+        if ($this->hasError()) {
+            return;
+        } else {
+            // コメント情報を新規登録する
+            try {
+                $postImageModel = new \Bbs\Model\Postpage();
+                $post = $postImageModel->createPost([
+                    // 'post_id' => $_POST['post_id'],
+                    'title' => $_POST['title'],
+                    'comment' => $_POST['comment'],
+                    'user_id' => $_SESSION['me']->id,
+                    'content' => $_POST['content'],
+                    'image_path' => $saveImagePath,
+                ]);
+            } catch (\Bbs\Exception\DuplicateEmail $e) {
+                $this->setErrors('postimage', $e->getMessage());
+                return;
+            }
+
+            echo "\<meta http-equiv='refresh' content='0;url=http://localhost:8000/'>";
+            exit;
+        }
     }
+
+    private function validate()
+    {
+        // トークンが空またはPOST送信とセッションに格納された値が異なるとエラー
+        // if (!isset($_POST['token']) || $_POST['token'] !== $_SESSION['token']) {
+        //   echo "不正なトークンです!";
+        //   exit;
+        // }
+        if ($_FILES['upload_file'] === '') {
+            throw new \Bbs\Exception\EmptyImage();
+        }
+        if ($_POST['username'] === '') {
+            throw new \Bbs\Exception\InvalidName();
+        }
+        if (!preg_match('/\A[a-zA-Z0-9]+\z/', $_POST['password'])) {
+            throw new \Bbs\Exception\InvalidPassword();
+        }
+    }
+
+
+
+
+
+
 }
-
-// $limit_image_size = 10; //最大サイズ・メガバイト
-// $base_image_name = ''; //重複しない名前を生成
-
-// //同一名のファイルが存在していない確認
-// $file_check = glob(IMAGE_DIR.$base_image_name.'.*');
-// if ($file_check === false) {
-//     exit('ファイルチェックシステムエラー');
-// }
-// if (!empty($file_check)) {//配列が空か確認
-//     //同一のファイルパスが存在していた場合の処理
-//     $base_image_name = ''; //重複しない名前を生成
-// }
-
-// try {//例外が発生する可能性がある処理
-//     //セキュリティー・改竄フォーム対策
-//     if (!isset($_FILES['upfile']['error']) || !is_int($_FILES['upfile']['error'])) {
-//         throw new RuntimeException('パラメータが不正です');
-//     }
-//     // $_FILES['upfile']['error'] の値を確認
-//     switch ($_FILES['upfile']['error']) {
-//         case UPLOAD_ERR_OK: // OK
-//             break;
-//         case UPLOAD_ERR_NO_FILE:   // ファイル未選択
-//             throw new RuntimeException('ファイルが選択されていません');
-//         case UPLOAD_ERR_INI_SIZE:  // php.ini定義の最大サイズ超過 (upload_max_filesize)
-//         case UPLOAD_ERR_FORM_SIZE: // フォーム定義の最大サイズ超過 (フォームは改竄される可能性があるため、別途チェック必要)
-//             throw new RuntimeException('ファイルサイズが大きすぎます');
-//         default:
-//             throw new RuntimeException('その他のエラーが発生しました');
-//     }
-//     //サイズチェック
-//     if ($_FILES['upfile']['size'] > ($limit_image_size * 1024 * 1024)) {
-//         throw new RuntimeException('ファイルのサイズが大きすぎます。ファイルの容量は'.$limit_image_size.'Mまでです。');
-//     }
-//     //拡張子の取得
-//     //拡張子の種類の配列は、時間がある時に再考が必要。
-//     if (!$ext = array_search(
-//         mime_content_type($_FILES['upfile']['tmp_name']),
-//         array(
-//             'gif' => 'image/gif',
-//             'jpg' => 'image/jpeg', //通常はjpgはこれ。
-//             'png' => 'image/png',
-//             'tiff' => 'image/tiff',
-//             'pdf' => 'application/pdf',
-//         ),
-//         true
-//     )) {
-//         throw new RuntimeException('ファイルの形式エラーです。');
-//     }
-//     //ファイル名を作成
-//     $new_image_name = $base_image_name.'.'.$ext;
-// } catch (RuntimeException $e) {//例外が発生した場合の処理
-//     exit($e->getMessage());
-// }

@@ -3,13 +3,12 @@
 require_once __DIR__.'/header.php';
 
 $app = new Bbs\Controller\Signup();
-$app->run();
+// $app->run();
 
-var_dump($_POST);
 
 ?>
   <div class="container">
-  <form action="" method="post" id="signup" class="form">
+  <form action="./signup_confirm.php" method="post" id="signup" class="form">
     <div class="row">
       <div class="col-sm-9 col-md-7 col-lg-5 mx-auto">
         <div class="card card-signin my-5">
@@ -36,10 +35,10 @@ var_dump($_POST);
                 <input type="password" name="password" class="form-control">
                 <p class="err"><?= h($app->getErrors('password')); ?></p>
               </div>
-              <input type="submit" value="sign up">
+              <input class="btn btn-primary" type="submit" value="sign up">
             <p>
               You have an account?
-              <p class="fs12"><a href="<?= SITE_URL; ?>/mypage.php">ログイン</a></p>
+              <p class="fs12"><a href="<?= SITE_URL; ?>/login.php">login</a></p>
             </p>
           </div>
         </div>

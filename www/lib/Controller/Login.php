@@ -9,7 +9,7 @@ class Login extends \Bbs\Controller
     {
         // ログインしていればトップページへ移動
         if ($this->isLoggedIn()) {
-            // header('Location:' . SITE_URL.'/index.php');
+            // echo "\<meta http-equiv='refresh' content='0;url=http://localhost:8000/index.php'>";
             return true;
         }
         // POSTメソッドがリクエストされていればpostProcessメソッド実行
@@ -62,7 +62,7 @@ class Login extends \Bbs\Controller
             $_SESSION['me'] = $user;
 
             // トップページへリダイレクト
-            header('Location: '.SITE_URL.'/Login.php');
+            echo "\<meta http-equiv='refresh' content='0;url=http://localhost:8000/index.php'>";
             exit;
         }
     }

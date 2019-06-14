@@ -10,7 +10,8 @@ class Logout extends \Bbs\Controller
         if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             // CSRF対策
             if (!isset($_POST['token']) || $_POST['token'] !== $_SESSION['token']) {
-                echo 'Invalid Token!';
+
+                echo "\<meta http-equiv='refresh' content='0;url=http://localhost:8000/login.php'>";
                 exit;
             }
 
@@ -31,7 +32,8 @@ class Logout extends \Bbs\Controller
         }
         session_destroy();
         // ログインページへリダイレクト
-        var_dump(SITE_URL);
-        header('Location: '.SITE_URL.'/login.php');
+        
+        echo "\<meta http-equiv='refresh' content='0;url=http://localhost:8000/login.php'>";
+        exit;
     }
 }

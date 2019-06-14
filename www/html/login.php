@@ -7,14 +7,13 @@ $app->run();
 
 ?>
 <div class="container">
-  <form action="index.php" method="post" id="login" class="form">
+  <form action="login.php" method="post" id="login" class="form">
     <div class="row">
       <div class="col-sm-9 col-md-7 col-lg-5 mx-auto">
         <div class="card card-signin my-5">
           <div class="card-body">
             <h5 class="card-title text-center">Sign In</h5>
             <!-- メールアドレス入力 -->
-
             <div class="form-group">
               <label>email address </label>
               <input type="text" name="email" value="<?= isset($app->getValues()->email) ? h($app->getValues()->email) : ''; ?>" class="form-control">

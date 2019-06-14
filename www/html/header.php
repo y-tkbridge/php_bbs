@@ -50,7 +50,7 @@ require_once __DIR__.'/../config/config.php';
         <li class="btn my-2 my-sm-0"><a href="<?= SITE_URL; ?>/login.php">ログイン</a></li>
         <li class="btn my-2 my-sm-0"><a href="<?= SITE_URL; ?>/signup.php">ユーザー登録</a></li>
       <?php } ?>
-t  </div>
+  </div>
 </nav>
 </header>
 
